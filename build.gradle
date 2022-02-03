@@ -1,0 +1,16 @@
+plugins {
+    id "java"
+    id 'com.github.johnrengelman.shadow' version '7.1.1'
+}
+
+tasks.register("stdJar", Jar) {
+    manifest {
+        attributes "Main-Class": "test.Main"
+    }
+}
+
+shadowJar {
+    manifest {
+        inheritFrom project.tasks.stdJar.manifest
+    }
+}
