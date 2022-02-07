@@ -3,22 +3,8 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-def tryInherit = false
-
-tasks.register("stdJar", Jar) {
+shadowJar {
     manifest {
         attributes "Main-Class": "test.Main"
-    }
-}
-
-shadowJar {
-    if (tryInherit) {
-        manifest {
-            inheritFrom project.tasks.stdJar.manifest
-        }
-    } else {
-        manifest {
-            attributes "Main-Class": "test.Main"
-        }
     }
 }
