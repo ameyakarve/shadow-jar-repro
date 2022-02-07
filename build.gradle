@@ -1,10 +1,43 @@
 plugins {
-    id "java"
+    id "scala"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-shadowJar {
+ext {
+    ver = [
+            scala   : '2.11.12',
+            scala_rt: '2.11',
+            spark   : '2.4.4'
+    ]
+}
+
+
+configurations {
+    // Dependencies that will be provided at runtime in the cloud execution
+    provided
+
+    compileOnly.extendsFrom(provided)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.scala-lang:scala-library:$ver.scala"
+
+    provided "org.apache.spark:spark-hive_$ver.scala_rt:$ver.spark"
+}
+
+tasks.register("allJar", com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
     manifest {
-        attributes "Main-Class": "test.Main"
+        attributes "Main-Class": "shadow_test.Main"
     }
+
+    from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath, project.configurations.provided]
+
+    zip64 true
+
+    mergeServiceFiles()
 }
