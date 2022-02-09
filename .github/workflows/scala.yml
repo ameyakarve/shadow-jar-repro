@@ -18,5 +18,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - uses: coursier/setup-action@v1
+      with:
+        jvm: adopt:11
+        apps: scala
     - name: Run tests
       run: ./gradlew allJar && scala -jar build/libs/shadow-jar.jar
